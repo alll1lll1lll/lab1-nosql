@@ -1,1 +1,13 @@
-.idea
+# Build output
+build/
+out/
+
+# Gradle cache
+.gradle/
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
