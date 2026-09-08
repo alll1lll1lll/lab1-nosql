@@ -13,3 +13,11 @@ spring:
 
 server:
   port: 8080
+
+logging:
+  level:
+    com.university.booking: DEBUG
+    org.springframework.data.redis: DEBUG
+  structured:
+    format:
+      console: logstash
