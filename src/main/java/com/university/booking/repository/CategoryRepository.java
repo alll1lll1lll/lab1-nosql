@@ -1,6 +1,6 @@
 package com.university.booking.repository;
 
-import com.university.booking.model.Booking;
+import com.university.booking.model.Category;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,28 +13,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
-public class BookingRepository {
+public class CategoryRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private static final String KEY_PREFIX = "booking:";
+    private static final String KEY_PREFIX = "category:";
 
-    public BookingRepository(RedisTemplate<String, Object> redisTemplate) {
+    public CategoryRepository(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
-    public Booking save(Booking booking) {
-        String key = KEY_PREFIX + booking.getId();
-        redisTemplate.opsForValue().set(key, booking);
-        return booking;
+    public Category save(Category category) {
+        String key = KEY_PREFIX + category.getId();
+        redisTemplate.opsForValue().set(key, category);
+        return category;
     }
 
-    public Optional<Booking> findById(String id) {
+    public Optional<Category> findById(String id) {
         String key = KEY_PREFIX + id;
-        Booking booking = (Booking) redisTemplate.opsForValue().get(key);
-        return Optional.ofNullable(booking);
+        Category category = (Category) redisTemplate.opsForValue().get(key);
+        return Optional.ofNullable(category);
     }
 
-    public List<Booking> findAll() {
+    public List<Category> findAll() {
         Set<String> keys = redisTemplate.keys(KEY_PREFIX + "*");
 
         if (keys == null || keys.isEmpty()) {
@@ -49,7 +49,7 @@ public class BookingRepository {
 
         return results.stream()
                 .filter(Objects::nonNull)
-                .map(obj -> (Booking) obj)
+                .map(obj -> (Category) obj)
                 .collect(Collectors.toList());
     }
 
