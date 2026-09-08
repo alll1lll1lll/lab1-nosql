@@ -1,5 +1,6 @@
 package com.university.booking.model;
 
+import com.university.booking.enums.PersonRole;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,4 @@ public class Person implements Serializable {
     private String id;
     private String name;
     private PersonRole role;
-
-    public enum PersonRole {
-        STUDENT,
-        TEACHER
-    }
 }

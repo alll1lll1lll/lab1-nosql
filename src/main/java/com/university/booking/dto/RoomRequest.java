@@ -1,6 +1,6 @@
 package com.university.booking.dto;
 
-import com.university.booking.model.Room.RoomType;
+import com.university.booking.enums.RoomType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

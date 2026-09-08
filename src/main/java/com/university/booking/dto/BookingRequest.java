@@ -19,6 +19,9 @@ public class BookingRequest {
     private String roomId;
 
     @NotBlank
+    private String categoryId;
+
+    @NotBlank
     private String eventName;
 
     @NotNull

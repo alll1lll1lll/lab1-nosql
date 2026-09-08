@@ -1,5 +1,6 @@
 package com.university.booking.model;
 
+import com.university.booking.enums.RoomType;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,4 @@ public class Room implements Serializable {
     private RoomType type;
     private int capacity;
     private String location;
-
-    public enum RoomType {
-        CLASSROOM,
-        COWORKING
-    }
 }

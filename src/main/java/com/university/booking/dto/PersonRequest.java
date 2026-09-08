@@ -1,6 +1,6 @@
 package com.university.booking.dto;
 
-import com.university.booking.model.Person.PersonRole;
+import com.university.booking.enums.PersonRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

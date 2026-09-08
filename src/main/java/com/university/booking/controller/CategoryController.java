@@ -1,8 +1,8 @@
 package com.university.booking.controller;
 
-import com.university.booking.dto.RoomRequest;
-import com.university.booking.model.Room;
-import com.university.booking.service.RoomService;
+import com.university.booking.dto.CategoryRequest;
+import com.university.booking.model.Category;
+import com.university.booking.service.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -17,30 +17,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/rooms")
+@RequestMapping("/api/categories")
 @AllArgsConstructor
-public class RoomController {
+public class CategoryController {
 
-    private final RoomService roomService;
+    private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Room> create(@Valid @RequestBody RoomRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(roomService.createRoom(request));
+    public ResponseEntity<Category> create(@Valid @RequestBody CategoryRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(request));
     }
 
     @GetMapping
-    public ResponseEntity<List<Room>> getAll() {
-        return ResponseEntity.ok(roomService.getAllRooms());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Room> getById(@PathVariable String id) {
-        return ResponseEntity.ok(roomService.getRoom(id));
+    public ResponseEntity<List<Category>> getAll() {
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        roomService.deleteRoom(id);
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 }
