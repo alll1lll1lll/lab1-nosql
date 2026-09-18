@@ -13,6 +13,14 @@ spring:
 
 server:
   port: 8080
+  error:
+    include-message: always
+
+app:
+  cart:
+    ttl-seconds: 900
+  rate-limit:
+    requests-per-minute: 60
 
 logging:
   level:

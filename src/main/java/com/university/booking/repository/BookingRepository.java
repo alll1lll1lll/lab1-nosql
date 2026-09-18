@@ -1,60 +1,19 @@
 package com.university.booking.repository;
 
+import com.university.booking.enums.RedisKeyPrefix;
 import com.university.booking.model.Booking;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Repository
-public class BookingRepository {
-
-    private final RedisTemplate<String, Object> redisTemplate;
-    private static final String KEY_PREFIX = "booking:";
+public class BookingRepository extends AbstractRedisRepository<Booking> {
 
     public BookingRepository(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
+        super(redisTemplate, RedisKeyPrefix.BOOKING, Booking.class);
     }
 
     public Booking save(Booking booking) {
-        String key = KEY_PREFIX + booking.getId();
-        redisTemplate.opsForValue().set(key, booking);
-        return booking;
-    }
-
-    public Optional<Booking> findById(String id) {
-        String key = KEY_PREFIX + id;
-        Booking booking = (Booking) redisTemplate.opsForValue().get(key);
-        return Optional.ofNullable(booking);
-    }
-
-    public List<Booking> findAll() {
-        Set<String> keys = redisTemplate.keys(KEY_PREFIX + "*");
-
-        if (keys == null || keys.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<Object> results = redisTemplate.opsForValue().multiGet(keys);
-
-        if (results == null) {
-            return Collections.emptyList();
-        }
-
-        return results.stream()
-                .filter(Objects::nonNull)
-                .map(obj -> (Booking) obj)
-                .collect(Collectors.toList());
-    }
-
-    public void delete(String id) {
-        String key = KEY_PREFIX + id;
-        redisTemplate.delete(key);
+        return super.save(booking.getId(), booking);
     }
 }
