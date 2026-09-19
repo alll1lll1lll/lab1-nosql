@@ -11,9 +11,6 @@ import lombok.Setter;
 public class PersonRequest {
 
     @NotBlank
-    private String id;
-
-    @NotBlank
     private String name;
 
     @NotNull
