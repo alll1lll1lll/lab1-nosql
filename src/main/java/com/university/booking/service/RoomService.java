@@ -18,7 +18,6 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     public Room createRoom(RoomRequest request) {
-
         Room room = Room.builder()
                 .id(UUID.randomUUID().toString())
                 .name(request.getName())
@@ -31,7 +30,6 @@ public class RoomService {
     }
 
     public Room getRoom(String id) {
-        
         return roomRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Room not found with id: " + id));
@@ -42,6 +40,6 @@ public class RoomService {
     }
 
     public void deleteRoom(String id) {
-        roomRepository.delete(id);
+        roomRepository.deleteById(id);
     }
 }

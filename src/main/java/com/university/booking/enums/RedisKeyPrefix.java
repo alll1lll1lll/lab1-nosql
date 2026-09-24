@@ -6,8 +6,6 @@ import lombok.Getter;
 public enum RedisKeyPrefix {
     BOOKING("booking:"),
     CATEGORY("category:"),
-    PERSON("person:"),
-    ROOM("room:"),
     CART("cart:"),
     RATE_LIMIT("rate:limit:");
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +19,10 @@ public class PersonService {
 
     public Person createPerson(PersonRequest request) {
         Person person = Person.builder()
-                .id(request.getId())
-                .name(request.getName())
+                .isuId(generateUniqueId())
+                .lastName(request.getLastName())
+                .firstName(request.getFirstName())
+                .middleName(request.getMiddleName())
                 .role(request.getRole())
                 .build();
 
@@ -37,6 +40,14 @@ public class PersonService {
     }
 
     public void deletePerson(String id) {
-        personRepository.delete(id);
+        personRepository.deleteById(id);
+    }
+
+    private String generateUniqueId() {
+        String id;
+        do {
+            id = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
+        } while (personRepository.existsById(id));
+        return id;
     }
 }

@@ -11,7 +11,13 @@ import lombok.Setter;
 public class PersonRequest {
 
     @NotBlank
-    private String name;
+    private String lastName;
+
+    @NotBlank
+    private String firstName;
+
+    @NotBlank
+    private String middleName;
 
     @NotNull
     private PersonRole role;
