@@ -10,14 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final RateLimitInterceptor rateLimitInterceptor;
     private final PersonAuthInterceptor personAuthInterceptor;
+    private final RateLimitInterceptor rateLimitInterceptor;
+    private final AdminOnlyInterceptor adminOnlyInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(personAuthInterceptor).addPathPatterns("/api/**");
         registry.addInterceptor(rateLimitInterceptor).addPathPatterns("/api/**");
-        registry.addInterceptor(personAuthInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/persons", "/api/persons/");
+        registry.addInterceptor(adminOnlyInterceptor).addPathPatterns("/api/**");
     }
 }

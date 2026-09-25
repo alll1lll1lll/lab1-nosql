@@ -35,6 +35,6 @@ public class CategoryService {
 
     @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(String id) {
-        categoryRepository.delete(id);
+        categoryRepository.deleteById(id);
     }
 }

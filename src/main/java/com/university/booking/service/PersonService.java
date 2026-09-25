@@ -1,10 +1,13 @@
 package com.university.booking.service;
 
 import com.university.booking.dto.PersonRequest;
+import com.university.booking.enums.PersonRole;
+import com.university.booking.exception.AccessDeniedException;
 import com.university.booking.exception.ResourceNotFoundException;
 import com.university.booking.model.Person;
 import com.university.booking.repository.PersonRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +18,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final AccessService accessService;
+    private final PersonLookupService personLookupService;
 
-    public Person createPerson(PersonRequest request) {
+    public Person createPerson(PersonRequest request, String currentPersonId) {
+        if (request.getRole() == PersonRole.ADMIN) {
+            accessService.requireAdmin(currentPersonId);
+        }
+
         Person person = Person.builder()
                 .isuId(generateUniqueId())
                 .lastName(request.getLastName())
@@ -28,8 +37,11 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public Person getPerson(String id) {
-        return personRepository.findById(id)
+    public Person getPerson(String id, String currentPersonId) {
+        if (!id.equals(currentPersonId) && !accessService.isAdmin(currentPersonId)) {
+            throw new AccessDeniedException("Можно просматривать только свой профиль");
+        }
+        return personLookupService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
@@ -37,6 +49,7 @@ public class PersonService {
         return personRepository.findAll();
     }
 
+    @CacheEvict(cacheNames = PersonLookupService.CACHE_NAME, key = "#id")
     public void deletePerson(String id) {
         personRepository.deleteById(id);
     }

@@ -1,6 +1,5 @@
 package com.university.booking.model;
 
-import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +12,9 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart implements Serializable {
+public class Cart {
 
     private String personId;
     private List<CartItem> items;
+    private long ttlSeconds;
 }

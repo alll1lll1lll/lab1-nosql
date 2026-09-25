@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,6 +26,18 @@ public class GlobalExceptionHandler {
                 .addKeyValue("status", ex.getStatus().value())
                 .log(ex.getMessage());
         return ResponseEntity.status(ex.getStatus()).body(build(ex.getStatus().value(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleIntegrity(DataIntegrityViolationException ex) {
+        String cause = ex.getMostSpecificCause().getMessage();
+        String message = cause != null && cause.contains("bookings_no_overlap")
+                ? "Помещение уже занято на это время"
+                : "Операция нарушает ограничения базы данных";
+        log.atWarn()
+                .addKeyValue("exception", ex.getClass().getSimpleName())
+                .log(cause);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(build(HttpStatus.CONFLICT.value(), message));
     }
 
     @ExceptionHandler(ResponseStatusException.class)

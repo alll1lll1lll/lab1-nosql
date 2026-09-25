@@ -1,4 +1,3 @@
--- Rooms seed data
 INSERT INTO rooms (id, name, type, capacity, location) VALUES
   ('K49-1216', 'Энтерпрайз 1216', 'COWORKING', 10, 'Кронверкский пр., 49, этаж 2'),
   ('K49-1312', 'Конференц-зал 1312', 'COWORKING', 40, 'Кронверкский пр., 49, этаж 3'),
@@ -105,3 +104,28 @@ INSERT INTO rooms (id, name, type, capacity, location) VALUES
   ('L9-4306', 'Аудитория 4306', 'CLASSROOM', 48, 'ул. Ломоносова, 9, этаж 3'),
   ('L9-4307', 'Аудитория 4307', 'CLASSROOM', 40, 'ул. Ломоносова, 9, этаж 3')
 ON CONFLICT (id) DO NOTHING;
+
+UPDATE rooms SET teacher_only = TRUE
+WHERE id IN ('K49-1212', 'K49-1214', 'K49-1215', 'K49-1216', 'K49-1217', 'K49-1218', 'K49-1200');
+
+INSERT INTO categories (id, name, description) VALUES
+  ('lecture', 'Лекция', 'Лекционное занятие'),
+  ('seminar', 'Семинар', 'Практическое занятие или семинар'),
+  ('meeting', 'Встреча', 'Рабочая встреча или консультация'),
+  ('event', 'Мероприятие', 'Внеучебное мероприятие, митап, хакатон'),
+  ('exam', 'Экзамен', 'Экзамен или зачёт')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO persons (id, last_name, first_name, middle_name, role) VALUES
+  ('100000', 'Администратор', 'Главный', 'Системный', 'ADMIN')
+ON CONFLICT (id) DO NOTHING;
+
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
+ALTER TABLE bookings DROP CONSTRAINT IF EXISTS bookings_no_overlap;
+
+ALTER TABLE bookings ADD CONSTRAINT bookings_no_overlap
+  EXCLUDE USING gist (
+    room_id WITH =,
+    tsrange(event_date + start_time, event_date + end_time) WITH &&
+  ) WHERE (status = 'APPROVED');

@@ -4,10 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum RedisKeyPrefix {
-    BOOKING("booking:"),
-    CATEGORY("category:"),
     CART("cart:"),
-    RATE_LIMIT("rate:limit:");
+    RATE_LIMIT_PERSON("rate:limit:person:"),
+    RATE_LIMIT_IP("rate:limit:ip:");
 
     private final String prefix;
 
