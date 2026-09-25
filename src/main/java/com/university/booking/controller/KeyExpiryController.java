@@ -1,7 +1,6 @@
 package com.university.booking.controller;
 
 import com.university.booking.listener.KeyExpiryListener;
-import com.university.booking.web.AdminOnly;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +17,6 @@ public class KeyExpiryController {
 
     private final KeyExpiryListener keyExpiryListener;
 
-    @AdminOnly
     @GetMapping("/expired")
     public Map<String, Long> getExpiredStats() {
         return keyExpiryListener.getExpiredStats();

@@ -15,7 +15,7 @@ public class PersonLookupService {
 
     private final PersonRepository personRepository;
 
-    @Cacheable(cacheNames = CACHE_NAME, key = "#id", unless = "#result == null")
+    @Cacheable(cacheNames = CACHE_NAME, key = "#a0", unless = "#result == null")
     public Optional<Person> findById(String id) {
         return personRepository.findById(id);
     }
