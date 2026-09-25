@@ -34,12 +34,12 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getById(@PathVariable String id) {
+    public ResponseEntity<Room> getById(@PathVariable("id") String id) {
         return ResponseEntity.ok(roomService.getRoom(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }

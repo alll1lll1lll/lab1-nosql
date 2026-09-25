@@ -22,4 +22,6 @@ public class RoomRequest {
 
     @NotBlank
     private String location;
+
+    private boolean teacherOnly;
 }

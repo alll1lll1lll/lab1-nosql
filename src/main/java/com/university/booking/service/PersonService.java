@@ -1,12 +1,11 @@
 package com.university.booking.service;
 
 import com.university.booking.dto.PersonRequest;
+import com.university.booking.exception.ResourceNotFoundException;
 import com.university.booking.model.Person;
 import com.university.booking.repository.PersonRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,8 +30,7 @@ public class PersonService {
 
     public Person getPerson(String id) {
         return personRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Person not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public List<Person> getAllPersons() {

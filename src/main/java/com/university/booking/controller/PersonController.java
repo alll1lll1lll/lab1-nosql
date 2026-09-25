@@ -34,12 +34,12 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getById(@PathVariable String id) {
+    public ResponseEntity<Person> getById(@PathVariable("id") String id) {
         return ResponseEntity.ok(personService.getPerson(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         personService.deletePerson(id);
         return ResponseEntity.noContent().build();
     }

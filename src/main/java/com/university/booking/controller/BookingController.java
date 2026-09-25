@@ -36,27 +36,27 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> getById(@PathVariable String id) {
+    public ResponseEntity<Booking> getById(@PathVariable("id") String id) {
         return ResponseEntity.ok(bookingService.getBooking(id));
     }
 
     @PutMapping("/{id}/submit")
-    public ResponseEntity<Booking> submit(@PathVariable String id) {
+    public ResponseEntity<Booking> submit(@PathVariable("id") String id) {
         return ResponseEntity.ok(bookingService.submitBooking(id));
     }
 
     @PutMapping("/{id}/approve")
-    public ResponseEntity<Booking> approve(@PathVariable String id, @RequestParam String adminId) {
+    public ResponseEntity<Booking> approve(@PathVariable("id") String id, @RequestParam("adminId") String adminId) {
         return ResponseEntity.ok(bookingService.approveBooking(id, adminId));
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<Booking> reject(@PathVariable String id, @RequestParam String adminId) {
+    public ResponseEntity<Booking> reject(@PathVariable("id") String id, @RequestParam("adminId") String adminId) {
         return ResponseEntity.ok(bookingService.rejectBooking(id, adminId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
     }

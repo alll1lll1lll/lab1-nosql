@@ -32,4 +32,7 @@ public class Room {
     private int capacity;
 
     private String location;
+
+    @jakarta.persistence.Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean teacherOnly;
 }

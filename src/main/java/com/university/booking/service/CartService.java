@@ -11,9 +11,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
+import com.university.booking.exception.ValidationException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -76,24 +75,22 @@ public class CartService {
     public List<Booking> checkout(String personId) {
         Cart cart = getCart(personId);
         if (cart == null || cart.getItems().isEmpty())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty or has expired");
+            throw new ValidationException("Cart is empty or has expired");
 
         List<Booking> createdBookings = new ArrayList<>();
 
         for (CartItem item : cart.getItems()) {
-            
-            BookingRequest bookingRequest = new BookingRequest();
-            bookingRequest.setPersonId(personId);
-            bookingRequest.setRoomId(item.getRoomId());
-            bookingRequest.setCategoryId(item.getCategoryId());
-            bookingRequest.setEventName(item.getEventName());
-            bookingRequest.setEventDate(item.getEventDate());
-            bookingRequest.setStartTime(item.getStartTime());
-            bookingRequest.setEndTime(item.getEndTime());
-            bookingRequest.setParticipantCount(item.getParticipantCount());
-            bookingRequest.setContactPhone(item.getContactPhone());
-
-            Booking booking = bookingService.createBooking(bookingRequest);
+            Booking booking = bookingService.createBooking(BookingRequest.builder()
+                    .personId(personId)
+                    .roomId(item.getRoomId())
+                    .categoryId(item.getCategoryId())
+                    .eventName(item.getEventName())
+                    .eventDate(item.getEventDate())
+                    .startTime(item.getStartTime())
+                    .endTime(item.getEndTime())
+                    .participantCount(item.getParticipantCount())
+                    .contactPhone(item.getContactPhone())
+                    .build());
             createdBookings.add(booking);
         }
 

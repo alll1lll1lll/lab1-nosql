@@ -28,12 +28,12 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/{personId}")
-    public ResponseEntity<Cart> addToCart(@PathVariable String personId, @Valid @RequestBody AddToCartRequest request) {
+    public ResponseEntity<Cart> addToCart(@PathVariable("personId") String personId, @Valid @RequestBody AddToCartRequest request) {
         return ResponseEntity.ok(cartService.addToCart(personId, request));
     }
 
     @GetMapping("/{personId}")
-    public ResponseEntity<Cart> getCart(@PathVariable String personId) {
+    public ResponseEntity<Cart> getCart(@PathVariable("personId") String personId) {
         Cart cart = cartService.getCart(personId);
         if (cart == null) {
             return ResponseEntity.notFound().build();
@@ -42,13 +42,13 @@ public class CartController {
     }
 
     @DeleteMapping("/{personId}")
-    public ResponseEntity<Void> clearCart(@PathVariable String personId) {
+    public ResponseEntity<Void> clearCart(@PathVariable("personId") String personId) {
         cartService.clearCart(personId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{personId}/checkout")
-    public ResponseEntity<List<Booking> > checkout(@PathVariable String personId) {
+    public ResponseEntity<List<Booking>> checkout(@PathVariable("personId") String personId) {
         return ResponseEntity.ok(cartService.checkout(personId));
     }
 }
