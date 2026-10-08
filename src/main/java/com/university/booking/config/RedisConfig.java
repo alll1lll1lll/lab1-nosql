@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import io.lettuce.core.ClientOptions;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +38,15 @@ public class RedisConfig {
                 JsonTypeInfo.As.PROPERTY
         );
         return objectMapper;
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.redis.fail-fast", havingValue = "true", matchIfMissing = true)
+    public LettuceClientConfigurationBuilderCustomizer failFastWhenDisconnected() {
+        return builder -> builder.clientOptions(ClientOptions.builder()
+                .autoReconnect(true)
+                .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS)
+                .build());
     }
 
     @Bean

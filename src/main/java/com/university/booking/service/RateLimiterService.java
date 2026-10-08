@@ -1,6 +1,8 @@
 package com.university.booking.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RateLimiterService {
@@ -23,8 +26,18 @@ public class RateLimiterService {
     private final StringRedisTemplate stringRedisTemplate;
 
     public long hit(String key, Duration window) {
-        Long count = stringRedisTemplate.execute(INCREMENT_IN_WINDOW, List.of(key),
-                String.valueOf(window.toSeconds()));
-        return count != null ? count : 0;
+        try {
+            Long count = stringRedisTemplate.execute(INCREMENT_IN_WINDOW, List.of(key),
+                    String.valueOf(window.toSeconds()));
+
+            return count != null ? count : 0;
+
+        } catch (DataAccessException e) {
+            log.atWarn()
+                    .addKeyValue("event", "rate_limiter_unavailable")
+                    .addKeyValue("error", e.getClass().getSimpleName())
+                    .log("rate limiter unavailable, request allowed: {}", e.getMessage());
+            return 0;
+        }
     }
 }
