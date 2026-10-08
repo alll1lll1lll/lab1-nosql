@@ -49,7 +49,7 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    @CacheEvict(cacheNames = PersonLookupService.CACHE_NAME, key = "#id")
+    @CacheEvict(cacheNames = PersonLookupService.CACHE_NAME, key = "#p0")
     public void deletePerson(String id) {
         personRepository.deleteById(id);
     }
